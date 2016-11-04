@@ -45,7 +45,8 @@ function mtdml_zip($files){
 		$download_file = file_get_contents($file);
 
 		//add it to the zip
-		$zip->addFromString(iconv("UTF-8","CP852", $posttype_folder_name.$post_folder_name.$mimetype_folder_name.basename($file)),$download_file);
+		//$zip->addFromString(iconv("UTF-8","CP852", $posttype_folder_name.$post_folder_name.$mimetype_folder_name.basename($file)),$download_file);
+		$zip->addFromString($posttype_folder_name.$post_folder_name.$mimetype_folder_name.basename($file),$download_file);
 
 	}
 
@@ -59,30 +60,30 @@ function mtdml_zip($files){
 	readfile($tmp_file);
 }
 
-// Get the attachments
-$selected_mime_types = isset( $_POST['mime_type'] ) ? $_POST['mime_type'] : '';
-
-$attachments = get_posts(array( 'post_type' => 'attachment', 'posts_per_page' => -1, 'post_status' => 'any', 'post_mime_type' => $selected_mime_types, 'post_parent' => null ));
-if ( $attachments ) {
-	
-	// Get post types selected by user
-	$selected_post_types = isset( $_POST['post_type'] ) ? $_POST['post_type'] : '';
-	
-	//Insert in array 'files', the files for zip
-	foreach ( $attachments as $post ) {
-		if(!empty($selected_post_types)){
-			if(in_array(get_post_type($post->post_parent), $selected_post_types)){
-				$files[$post->ID] = get_attached_file( $post->ID );
-			}
-		}else{
-			$files[$post->ID] = get_attached_file( $post->ID );
-		}
-	}
-	wp_reset_postdata();
-	
-}
 // if button download, execute function for zip
 if(isset($_POST['mtdml_download'])){
+	// Get the attachments
+	$selected_mime_types = isset( $_POST['mime_type'] ) ? $_POST['mime_type'] : '';
+
+	$attachments = get_posts(array( 'post_type' => 'attachment', 'posts_per_page' => -1, 'post_status' => 'any', 'post_mime_type' => $selected_mime_types, 'post_parent' => null ));
+	if ( $attachments ) {
+		
+		// Get post types selected by user
+		$selected_post_types = isset( $_POST['post_type'] ) ? $_POST['post_type'] : '';
+		
+		//Insert in array 'files', the files for zip
+		foreach ( $attachments as $post ) {
+			if(!empty($selected_post_types)){
+				if(in_array(get_post_type($post->post_parent), $selected_post_types)){
+					$files[$post->ID] = get_attached_file( $post->ID );
+				}
+			}else{
+				$files[$post->ID] = get_attached_file( $post->ID );
+			}
+		}
+		wp_reset_postdata();
+		
+	}
 	if(empty($files)){
 		header("Location: http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."&error=no-files");
 		exit;

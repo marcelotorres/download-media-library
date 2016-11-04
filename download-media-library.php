@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Download Media Library
- * Plugin URI: http://www.marcelotorresweb.com/download-media-library/
+ * Plugin URI: https://github.com/marcelotorres/download-media-library/
  * Description: Download the files from the Media Library in ZIP format, <strong>organized by post type > post name > media type > file extension</strong>.
  * Author: marcelotorres
  * Author URI: http://marcelotorresweb.com/
- * Version: 0.2
+ * Version: 0.2.1
  * License: GPLv2 or later
  * Text Domain: mtdml
  * Domain Path: /languages/
